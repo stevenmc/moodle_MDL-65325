@@ -631,4 +631,26 @@ class assign_submission_file extends assign_submission_plugin {
 
         return $sets;
     }
+
+    public function view_header() {
+        global $OUTPUT;
+        $pluginname = get_string('pluginname', 'assignsubmission_file');
+        $o = '';
+        $config = $this->get_config();
+        $configuredfiletypes = $this->get_configured_typesets();
+
+        $items = [];
+        $maxsubmissions = get_string('expectedsubmissioncount', 'assignsubmission_file', $config->maxfilesubmissions);
+        $items[] = $maxsubmissions;
+        if (!empty($configuredfiletypes)) {
+            $filetypelist = html_writer::alist($configuredfiletypes);
+            $items[] = get_string('expectedfiletypes', 'assignsubmission_file', $filetypelist);
+        } else {
+            $items[] = get_string('expectallfiletypes', 'assignsubmission_file');
+        }
+
+        $o .= $OUTPUT->heading($pluginname, 5);
+        $o .= html_writer::alist($items, null, "ol");
+        return $o;
+    }
 }
